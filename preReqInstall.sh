@@ -84,8 +84,6 @@ mount -t xfs /dev/hanavg/datalv /hana/data
 mount -t xfs /dev/hanavg/loglv /hana/log 
 mkdir /hana/data/sapbits
 echo "mounthanashared end" >> /tmp/parameter.txt
-exit 0
-
 
 if [ ! -d "/hana/data/sapbits" ]
  then
