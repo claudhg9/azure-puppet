@@ -125,10 +125,13 @@ else
     fi	
 fi
 
+echo "hana unrar start" >> /tmp/parameter.txt
 #!/bin/bash
 cd /hana/data/sapbits
 unrar -inul x 51052325_part1.exe
+echo "hana unrar end" >> /tmp/parameter.txt
 
+echo "hana prepare start" >> /tmp/parameter.txt
 cd /hana/data/sapbits
 sbfilecount=`ls -1 | grep 51052325 | grep -v part| wc -l`
 if [ $sbfilecount -gt 0 ]
@@ -154,6 +157,7 @@ sedcmd4="s/root_password=AweS0me@PW/root_password=$HANAPWD/g"
 sedcmd5="s/sid=H10/sid=$HANASID/g"
 sedcmd6="s/number=00/number=$HANANUMBER/g"
 cat hdbinst.cfg | sed $sedcmd | sed $sedcmd2 | sed $sedcmd3 | sed $sedcmd4 | sed $sedcmd5 | sed $sedcmd6 > hdbinst-local.cfg
+echo "hana preapre end" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "install hana start" >> /tmp/parameter.txt
