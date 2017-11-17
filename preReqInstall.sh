@@ -87,7 +87,8 @@ echo "mounthanashared end" >> /tmp/parameter.txt
 exit 0
 
 
-if [ ! -d "/hana/data/sapbits" ]; then
+if [ ! -d "/hana/data/sapbits" ]
+ then
  mkdir "/hana/data/sapbits"
 fi
 
