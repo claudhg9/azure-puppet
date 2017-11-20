@@ -51,9 +51,10 @@ UserTasksMax=infinity`n/g"
 cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
 cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
-echo "logicalvols start $vmSize" >> /tmp/parameter.txt
+echo "logicalvols start" >> /tmp/parameter.txt
 if [$vmSize = 'Standard_E16s_v3'] || [$vmSize = 'Standard_E32s_v3'] || [$vmSize = 'Standard_E64s_v3'] || [$vmSize = 'Standard_GS5']
 then
+  echo $vmSize >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefg]
   vgcreate hanavg /dev/sd[fg]
   lvcreate -l 80%FREE -n datalv hanavg
@@ -62,6 +63,7 @@ then
   mkfs.xfs /dev/hanavg/loglv
 elif [$vmSize = 'Standard_M64s']
 then
+  echo $vmSize >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefgh]
   vgcreate hanavg /dev/sd[gh]
   lvcreate -l 80%FREE -n datalv hanavg
@@ -70,6 +72,7 @@ then
   mkfs.xfs /dev/hanavg/loglv
 elif [$vmSize = 'Standard_M64ms'] || [$vmSize = 'Standard_M128s'] 
 then
+  echo $vmSize >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefghij]
   vgcreate hanavg /dev/sd[hij]
   lvcreate -l 80%FREE -n datalv hanavg
@@ -78,6 +81,7 @@ then
   mkfs.xfs /dev/hanavg/loglv
 elif [$vmSize = 'Standard_M128ms'] 
 then
+  echo $vmSize >> /tmp/parameter.txt
   pvcreate /dev/sd[cdefghijklmn]
   vgcreate hanavg /dev/sd[jklmn]
   lvcreate -l 80%FREE -n datalv hanavg
@@ -93,6 +97,7 @@ echo "logicalvols end $vmSize" >> /tmp/parameter.txt
 echo "logicalvols2 start" >> /tmp/parameter.txt
 if [$vmSize = 'Standard_E16s_v3'] || [$vmSize = 'Standard_E32s_v3'] || [$vmSize = 'Standard_E64s_v3'] || [$vmSize = 'Standard_GS5']
 then
+  echo $vmSize >> /tmp/parameter.txt
   vgcreate sharedvg /dev/sdc 
   vgcreate usrsapvg /dev/sdd
   vgcreate backupvg /dev/sde  
@@ -104,6 +109,7 @@ then
   mkfs -t xfs /dev/usrsapvg/usrsaplv
 elif [$vmSize = 'Standard_M64s']
 then
+  echo $vmSize >> /tmp/parameter.txt
   vgcreate sharedvg /dev/sdc 
   vgcreate backupvg /dev/sd[ef]  
   vgcreate usrsapvg /dev/sdd 
@@ -115,6 +121,7 @@ then
   mkfs -t xfs /dev/usrsapvg/usrsaplv
 elif [$vmSize = 'Standard_M64ms'] || [$vmSize = 'Standard_M128s'] 
 then
+  echo $vmSize >> /tmp/parameter.txt
   vgcreate sharedvg /dev/sdc 
   vgcreate backupvg /dev/sd[efg]  
   vgcreate usrsapvg /dev/sdd
@@ -126,6 +133,7 @@ then
   mkfs -t xfs /dev/usrsapvg/usrsaplv
 elif [$vmSize = 'Standard_M128ms'] 
   then
+  echo $vmSize >> /tmp/parameter.txt
   vgcreate sharedvg /dev/sdc 
   vgcreate backupvg /dev/sd[efghi]  
   vgcreate usrsapvg /dev/sdd 
