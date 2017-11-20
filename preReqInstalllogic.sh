@@ -51,7 +51,7 @@ UserTasksMax=infinity`n/g"
 cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
 cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
-echo "logicalvols start" >> /tmp/parameter.txt
+echo "logicalvols start $vmSize" >> /tmp/parameter.txt
 if [$vmSize = 'Standard_E16s_v3'] || [$vmSize = 'Standard_E32s_v3'] || [$vmSize = 'Standard_E64s_v3'] || [$vmSize = 'Standard_GS5']
 then
   pvcreate /dev/sd[cdefg]
@@ -86,7 +86,7 @@ then
   mkfs.xfs /dev/hanavg/loglv
 fi
 
-echo "logicalvols end" >> /tmp/parameter.txt
+echo "logicalvols end $vmSize" >> /tmp/parameter.txt
 
 
 #!/bin/bash
@@ -194,7 +194,7 @@ fi
 echo "hana unrar start" >> /tmp/parameter.txt
 #!/bin/bash
 cd /hana/data/sapbits
-unrar -inul x 51052325_part1.exe
+unrar x 51052325_part1.exe
 echo "hana unrar end" >> /tmp/parameter.txt
 
 echo "hana prepare start" >> /tmp/parameter.txt
