@@ -171,25 +171,6 @@ echo "hana download end" >> /tmp/parameter.txt
 
 date >> /tmp/testdate
 cd /hana/data/sapbits
-rarfilecount=`ls -1 | grep "rar" | wc -l`
-if [ $rarfilecount -lt 3 ]
-then
-    exit 1
-else
-    ckfilecount=`ls -1 | grep md5sums.checked | wc -l`
-    if [ $ckfilecount -gt 0 ]
-    then
-        exit 0
-    fi
-    mdstat=`md5sum --status -c md5sums`
-    if [ $mdstat -gt 0 ]
-    then
-        exit 1
-    else
-	cp md5sums md5sums.checked    
-        exit 0
-    fi	
-fi
 
 echo "hana unrar start" >> /tmp/parameter.txt
 #!/bin/bash
