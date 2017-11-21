@@ -114,19 +114,6 @@ echo "hana unrar end" >> /tmp/parameter.txt
 
 echo "hana prepare start" >> /tmp/parameter.txt
 cd /hana/data/sapbits
-sbfilecount=`ls -1 | grep 51052325 | grep -v part| wc -l`
-if [ $sbfilecount -gt 0 ]
-then
-    ssfilecount=`find /hana/data/sapbits/51052325 | wc -l`
-    if [ $ssfilecount -gt 5365 ]
-    then
-        exit 0
-    else
-        exit 1
-    fi
-else
-    exit 1
-fi
 
 #!/bin/bash
 cd /hana/data/sapbits
