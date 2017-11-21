@@ -52,7 +52,7 @@ cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.
 cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
 echo "logicalvols start" >> /tmp/parameter.txt
-if ["$vmSize" = "Standard_E16s_v3"] || ["$vmSize" = "Standard_E32s_v3"] || ["$vmSize" = "Standard_E64s_v3"] || ["$vmSize" = "Standard_GS5"]
+if [$vmSize = "Standard_E16s_v3" || $vmSize = "Standard_E32s_v3" || $vmSize = "Standard_E64s_v3" || $vmSize = "Standard_GS5"]
 then
   pvcreate /dev/sd[cdefg]
   vgcreate hanavg /dev/sd[fg]
@@ -60,7 +60,7 @@ then
   lvcreate -l 20%FREE -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
   mkfs.xfs /dev/hanavg/loglv
-elif ["$vmSize" = "Standard_M64s"]
+elif [$vmSize = "Standard_M64s"]
 then
   pvcreate /dev/sd[cdefgh]
   vgcreate hanavg /dev/sd[gh]
@@ -68,7 +68,7 @@ then
   lvcreate -l 20%FREE -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
   mkfs.xfs /dev/hanavg/loglv
-elif ["$vmSize" = "Standard_M64ms"] || ["$vmSize" = "Standard_M128s"] 
+elif [$vmSize = "Standard_M64ms" || $vmSize = "Standard_M128s"] 
 then
    pvcreate /dev/sd[cdefghij]
   vgcreate hanavg /dev/sd[hij]
@@ -76,7 +76,7 @@ then
   lvcreate -l 20%FREE -n loglv hanavg
   mkfs.xfs /dev/hanavg/datalv
   mkfs.xfs /dev/hanavg/loglv
-elif ["$vmSize" = "Standard_M128ms"] 
+elif [$vmSize = Standard_M128ms] 
 then
     pvcreate /dev/sd[cdefghijklmn]
   vgcreate hanavg /dev/sd[jklmn]
@@ -91,7 +91,7 @@ echo "logicalvols end $vmSize" >> /tmp/parameter.txt
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
-if ["$vmSize" = "Standard_E16s_v3"] || ["$vmSize" = "Standard_E32s_v3"] || ["$vmSize" = "Standard_E64s_v3"] || ["$vmSize" = "Standard_GS5"]
+if [$vmSize = Standard_E16s_v3 || $vmSize = "Standard_E32s_v3" || $vmSize = "Standard_E64s_v3" || $vmSize = "Standard_GS5"]
 then
   vgcreate sharedvg /dev/sdc 
   vgcreate usrsapvg /dev/sdd
@@ -102,7 +102,7 @@ then
   mkfs -t xfs /dev/sharedvg/sharedlv 
   mkfs -t xfs /dev/backupvg/backuplv 
   mkfs -t xfs /dev/usrsapvg/usrsaplv
-elif ["$vmSize" = "Standard_M64s"]
+elif [$vmSize = "Standard_M64s"]
 then
   vgcreate sharedvg /dev/sdc 
   vgcreate backupvg /dev/sd[ef]  
@@ -113,7 +113,7 @@ then
   mkfs -t xfs /dev/sharedvg/sharedlv 
   mkfs -t xfs /dev/backupvg/backuplv 
   mkfs -t xfs /dev/usrsapvg/usrsaplv
-elif ["$vmSize" = "Standard_M64ms"] || ["$vmSize" = "Standard_M128s"] 
+elif [$vmSize = "Standard_M64ms" || $vmSize = "Standard_M128s"] 
 then
   vgcreate sharedvg /dev/sdc 
   vgcreate backupvg /dev/sd[efg]  
@@ -124,7 +124,7 @@ then
   mkfs -t xfs /dev/sharedvg/sharedlv 
   mkfs -t xfs /dev/backupvg/backuplv 
   mkfs -t xfs /dev/usrsapvg/usrsaplv
-elif ["$vmSize" = "Standard_M128ms"] 
+elif [$vmSize = "Standard_M128ms"] 
   then
   vgcreate sharedvg /dev/sdc 
   vgcreate backupvg /dev/sd[efghi]  
