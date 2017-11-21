@@ -3,6 +3,7 @@ HANAUSR=$2
 HANAPWD=$3
 HANASID=$4
 HANANUMBER=$5
+vmSize=$6
 
 
 #install hana prereqs
@@ -39,39 +40,38 @@ echo $Uri >> /tmp/url.txt
 
 cp -f /etc/waagent.conf /etc/waagent.conf.orig
 sedcmd="s/ResourceDisk.EnableSwap=n/ResourceDisk.EnableSwap=y/g"
-sedcmd2="s/ResourceDisk.SwapSizeMB = 16384/ResourceDisk.SwapSizeMB = 16384/g"
+sedcmd2="s/ResourceDisk.SwapSizeMB=16384/ResourceDisk.SwapSizeMB=16384/g"
 cat /etc/waagent.conf | sed $sedcmd | sed $sedcmd2 > /etc/waagent.conf.new
 cp -f /etc/waagent.conf.new /etc/waagent.conf
 
 cp -f /etc/systemd/login.conf.d/sap.conf /etc/systemd/login.conf.d/sap.conf.orig
-sedcmd="s/[login]`n
-UserTasksMax=infinity`n/[login]`n
-UserTasksMax=infinity`n/g"
+sedcmd="s/[login]\n
+UserTasksMax=infinity\n/[login]\n
+UserTasksMax=infinity\n/g"
 cat /etc/systemd/login.conf.d/sap.conf | sed $sedcmd > //etc/systemd/login.conf.d/sap.conf.new
 cp -f /etc/systemd/login.conf.d/sap.conf.new /etc/systemd/login.conf.d/sap.conf
 
 echo "logicalvols start" >> /tmp/parameter.txt
-pvcreate /dev/sd[cdefg]
-vgcreate hanavg /dev/sd[fg]
-lvcreate -l 80%FREE -n datalv hanavg
-lvcreate -l 20%FREE -n loglv hanavg
-mkfs.xfs /dev/hanavg/datalv
-mkfs.xfs /dev/hanavg/loglv
+  pvcreate /dev/sd[cdefg]
+  vgcreate hanavg /dev/sd[fg]
+  lvcreate -l 80%FREE -n datalv hanavg
+  lvcreate -l 20%FREE -n loglv hanavg
+  mkfs.xfs /dev/hanavg/datalv
+  mkfs.xfs /dev/hanavg/loglv
 echo "logicalvols end" >> /tmp/parameter.txt
 
 
 #!/bin/bash
 echo "logicalvols2 start" >> /tmp/parameter.txt
-vgcreate sharedvg /dev/sdc 
-vgcreate usrsapvg /dev/sdd
-vgcreate backupvg /dev/sde  
- 
-lvcreate -l 100%FREE -n sharedlv sharedvg 
-lvcreate -l 100%FREE -n backuplv backupvg 
-lvcreate -l 100%FREE -n usrsaplv usrsapvg 
-mkfs -t xfs /dev/sharedvg/sharedlv 
-mkfs -t xfs /dev/backupvg/backuplv 
-mkfs -t xfs /dev/usrsapvg/usrsaplv
+  vgcreate sharedvg /dev/sdc 
+  vgcreate usrsapvg /dev/sdd
+  vgcreate backupvg /dev/sde  
+  lvcreate -l 100%FREE -n sharedlv sharedvg 
+  lvcreate -l 100%FREE -n backuplv backupvg 
+  lvcreate -l 100%FREE -n usrsaplv usrsapvg 
+  mkfs -t xfs /dev/sharedvg/sharedlv 
+  mkfs -t xfs /dev/backupvg/backuplv 
+  mkfs -t xfs /dev/usrsapvg/usrsaplv
 echo "logicalvols2 end" >> /tmp/parameter.txt
 
 
@@ -105,30 +105,11 @@ echo "hana download end" >> /tmp/parameter.txt
 
 date >> /tmp/testdate
 cd /hana/data/sapbits
-rarfilecount=`ls -1 | grep "rar" | wc -l`
-if [ $rarfilecount -lt 3 ]
-then
-    exit 1
-else
-    ckfilecount=`ls -1 | grep md5sums.checked | wc -l`
-    if [ $ckfilecount -gt 0 ]
-    then
-        exit 0
-    fi
-    mdstat=`md5sum --status -c md5sums`
-    if [ $mdstat -gt 0 ]
-    then
-        exit 1
-    else
-	cp md5sums md5sums.checked    
-        exit 0
-    fi	
-fi
 
 echo "hana unrar start" >> /tmp/parameter.txt
 #!/bin/bash
 cd /hana/data/sapbits
-unrar -inul x 51052325_part1.exe
+unrar x 51052325_part1.exe
 echo "hana unrar end" >> /tmp/parameter.txt
 
 echo "hana prepare start" >> /tmp/parameter.txt
